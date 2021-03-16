@@ -1,0 +1,61 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+select:focus,
+button:focus {
+  outline: none;
+}
+
+html {
+  font-family: "Lato", sans-serif;
+}
+.editor-container {
+  user-select: none;
+  width: 100vw;
+  min-height: 80vh;
+
+  display: grid;
+  grid-template-columns: 350px 1fr 50px;
+}
+
+.editor-container.fullscreen {
+  height: 100vh;
+  background-color: white;
+}
+
+.canvas-parent {
+  border: 1px solid rgb(204, 204, 204);
+}
+.controllers {
+  display: flex;
+  flex-direction: column;
+}
+
+.controllers span {
+  font-size: 2rem;
+  border-bottom: 1px solid rgb(172, 172, 172);
+  color: #222;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.controllers span:hover,
+.controllers span.active {
+  background-color: #444;
+  color: white;
+}

@@ -1,0 +1,257 @@
+/** Misc **/
+.link {
+  color: rgb(8, 94, 94);
+  cursor: pointer;
+}
+.link:hover {
+  color: rgb(15, 143, 143);
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.bg-blur {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1px);
+}
+
+input:not([type="radio"]) {
+  width: 100%;
+  padding: 0.5rem 0.2rem;
+  border: 2px solid rgb(128, 126, 126);
+  border-radius: 0.2rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+input:focus {
+  border-color: rgb(12, 141, 141);
+  outline: none;
+}
+
+input[type="color"] {
+  height: 35px;
+  padding: 0;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h2,
+h3,
+h4 {
+  font-weight: 400;
+}
+
+button.bg-gray {
+  background: rgb(94, 92, 92);
+}
+
+button.bg-gray:hover {
+  background: rgb(75, 74, 74);
+}
+
+button.bg-cyan {
+  background-color: rgb(5, 87, 87);
+}
+
+button.bg-cyan:hover {
+  background-color: rgb(9, 139, 139);
+}
+
+.btn-group {
+  margin: 0;
+}
+.btn-group button {
+  border-radius: 0;
+  margin-right: 0.5rem;
+}
+
+.btn-group button:last-child {
+  color: white;
+  background: #333;
+  margin-right: 0;
+}
+
+.btn-group button:last-child:hover {
+  background: #444;
+}
+
+.flex-start {
+  justify-content: flex-start;
+}
+
+.line-style-con,
+.symbol-style-con {
+  position: relative;
+}
+
+#line-style:focus + #line-styles-con,
+#line-styles-con:active,
+.symbol-container:active,
+#symbol-style:focus + .symbol-container {
+  transform: scaleY(1);
+}
+
+#line-styles-con,
+.symbol-container {
+  z-index: 8;
+  top: 55px;
+  position: absolute;
+  background: white;
+  border: 1px solid #aaa;
+  transform: scaleY(0);
+}
+
+#line-styles-con li,
+.symbol-container li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #aaa;
+  cursor: pointer;
+}
+
+.symbol-container {
+  border-bottom: none;
+  color: #788504;
+}
+
+.symbol-container ul {
+  display: flex;
+}
+
+#line-styles-con li:hover,
+.symbol-container li:hover {
+  background-color: #ddd;
+}
+
+#line-style,
+#symbol-style {
+  min-width: 100px;
+  border: 2px solid rgb(128 126 126);
+  margin-top: 0.3rem;
+  padding: 6px;
+  border-radius: 0.2rem;
+}
+
+#symbol-style:focus,
+#line-style:focus {
+  border-color: rgb(12, 141, 141);
+}
+
+#symbol-style {
+  color: #b35107;
+}
+
+.line-style-con * > svg:last-child {
+  display: none;
+}
+
+.symbol-style-con ~ * {
+  min-width: 100px;
+}
+
+.whenNotHover {
+  margin-right: 0.2rem;
+}
+
+.whenNotHover * {
+  fill: inherit;
+  stroke: inherit;
+  background: inherit;
+  color: inherit;
+}
+
+.whenNotHover > svg {
+  vertical-align: middle;
+  width: 14px;
+}
+
+.underline-hover:hover {
+  text-decoration: underline;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.selected,
+.measurement-child.selected {
+  background: #eee;
+}
+
+.hide-measurement td:nth-child(2) {
+  filter: blur(1px);
+}
+
+.measurement-child.hidden {
+  display: none;
+}
+
+.measurement-child td {
+  padding-left: 2rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  font-style: italic;
+}
+
+.status-bar {
+  padding: 1rem;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #aaa;
+}
+
+.status-bar > ul {
+  display: flex;
+}
+.status-bar > ul li:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.status-bar > ul button,
+.badge {
+  background-color: #ddd;
+  color: #333;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  display: inline-block;
+  cursor: pointer;
+  transition: 100ms transform;
+}
+
+.status-bar > ul button:hover {
+  background-color: #999;
+  color: white;
+}
+
+.status-bar > ul button:active {
+  transform: translateY(2px);
+} 
+
+.badge {
+  background-color: rgb(0, 138, 156);
+  color: white;
+  border-radius: 5rem;
+}
+
+#delete button {
+  background-color: rgb(189, 7, 7);
+  color: white;
+}
+
+#delete button:hover {
+  background-color: rgb(161, 3, 3);
+}
+
+#okBtn button {
+  background-color: rgb(14, 168, 0);
+  color: white;
+}
+#okBtn button:hover {
+  background-color: rgb(16, 150, 4);
+}

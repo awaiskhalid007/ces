@@ -1,0 +1,2 @@
+[04-Mar-2021 11:25:17 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\emailsController::project_invitation() in /home/lentsdni/groundplan.lenticas.com/app/Http/Controllers/emailsController.php on line 164
+[04-Mar-2021 11:29:17 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\emailsController::project_invitation() in /home/lentsdni/groundplan.lenticas.com/app/Http/Controllers/emailsController.php on line 165

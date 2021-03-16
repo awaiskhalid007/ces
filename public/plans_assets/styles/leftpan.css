@@ -1,0 +1,600 @@
+.right-panel {
+  padding: 1rem;
+  overflow: hidden;
+  border-bottom: 1px solid #aaa;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tabs ul {
+  display: flex;
+}
+.tabs ul li {
+  padding: 0.4rem;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: 0.3rem 0.3rem 0 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tabs ul li:hover,
+.tabs ul li.active {
+  background-color: rgb(214, 213, 213);
+  color: #000;
+  border-bottom: none;
+}
+
+.tabs ul li#check.checked {
+  color: green;
+}
+
+/** Tabs Content **/
+
+.tabs-content::-webkit-scrollbar {
+  width: 5px;
+  background-color: #fff;
+}
+
+.tabs-content::-webkit-scrollbar-thumb {
+  background: #999;
+}
+
+.tabs-content {
+  position: relative;
+  height: calc(100% - 15px);
+  overflow-y: auto;
+}
+
+.tabs-content > * {
+  display: none;
+  padding-top: 0.8rem;
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  background-color: white;
+}
+
+.tabs-content .active {
+  display: block;
+  min-height: 100%;
+  z-index: 5;
+}
+
+.stage-content.no-stage {
+  height: 100%;
+}
+
+.stage-action {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  left: 126px;
+  top: 47px;
+  width: 119px;
+  transform: scaleY(0);
+  z-index: 2;
+}
+.stage-action h4 {
+  background-color: #ddd;
+}
+.stage-action h4,
+.stage-action li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ccc;
+}
+.stage-action li {
+  cursor: pointer;
+}
+
+.stage-action li:hover {
+  background: #ddd;
+}
+
+.measurement-value-cell button:focus +.stage-action,
+.stage-measurements header button:focus + .stage-action,
+#hide-n-show-btn:focus + .stage-action,
+.stage-action:active {
+  transform: scaleY(1);
+}
+
+.measurement-value-cell button {
+  color: #222;
+  font-size: 14px;
+}
+
+td div.stage-action svg {
+  display: inline;
+}
+
+.measurement-value-cell .stage-action {
+  top: 28px;
+  left: -20px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
+  box-shadow: -1px -1px 3px rgba(0, 0, 0, .2);
+  width: 185px;
+  text-align: left;
+}
+.measurement-value-cell {
+  position: relative;
+}
+
+.stage-content.no-stage > * {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  top: 0;
+  left: 0;
+  margin-top: 1rem;
+}
+
+.stage-measurements {
+  margin: 0.5rem 0 1rem 0;
+  background-color: #fff;
+  padding-bottom: 0.5rem;
+}
+
+.stage-measurements.hide .empty-measurements {
+  display: none;
+}
+.stage-measurements header {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(2, 129, 129);
+  color: white;
+  padding: 0.5rem;
+  position: relative;
+}
+.stage-measurements header button {
+  color: white;
+}
+
+.stage-measurements header .stage-action {
+  left: 131px;
+  top: 30px;
+  width: 180px;
+  color: #222;
+  font-size: 0.9rem;
+}
+
+.empty-measurements > ul,
+.stage-measurements > ul {
+  display: flex;
+  justify-content: space-around;
+}
+
+.empty-measurements > ul li,
+.stage-measurements > ul li {
+  padding: 0.4rem;
+  text-align: center;
+  background-color: #ececec;
+  flex-grow: 1;
+  color: rgb(2, 129, 129);
+  cursor: pointer;
+}
+
+.empty-measurements > ul li:hover,
+.stage-measurements > ul li:hover {
+  color: rgb(6, 184, 184);
+}
+
+.stage-measurements table {
+  border-collapse: collapse;
+}
+
+.empty-measurements {
+  border: 2px solid #ddd;
+}
+
+.empty-measurements tr {
+  position: relative;
+}
+.empty-measurements tr svg.onlyWhenHover,
+.empty-measurements tr:hover .whenNotHover {
+  display: none;
+  color: #333;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.whenNotHover,
+.empty-measurements tr:hover svg.onlyWhenHover {
+  display: inline;
+}
+
+
+.stage-measurements tr > th {
+  font-size: 0.7rem;
+  color: #333;
+  background-color: #dfdfdf;
+}
+
+.stage-measurements tr > :nth-child(2) {
+  text-align: right;
+
+}
+.stage-measurements tr:not(:first-child) {
+  border-top: 2px solid #ddd;
+}
+.up-arrow-con {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0.5rem 0;
+  color: rgb(2, 129, 129);
+}
+
+.stage-measurements p {
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  text-align: center;
+}
+
+.add-stage-container {
+  height: 200px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 2px dashed rgb(5, 148, 148);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-stage-container button,
+.add-stage-container p {
+  z-index: 1;
+  color: white;
+}
+.add-stage-container p .link {
+  color: rgb(26, 212, 212);
+}
+.add-stage-container p .link:hover {
+  color: rgb(2, 255, 255);
+}
+
+.add-stage-container button {
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  background: rgba(8, 94, 94);
+  color: white;
+  border-radius: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+.add-stage-container button:focus,
+.add-stage-container button:active,
+.add-stage-container button:hover {
+  background: rgb(3, 155, 155);
+}
+
+.detail-content > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid rgb(12, 139, 139);
+}
+.detail-content input.plan-name {
+  color: black;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+.detail-content input.plan-name:disabled {
+  border: none;
+  padding: 0.5rem 0;
+}
+
+.detail-content ul {
+  margin-top: 2rem;
+}
+.detail-content ul li {
+  padding: 0.8rem;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 0.3rem;
+  background: rgba(8, 94, 94);
+  cursor: pointer;
+  color: white;
+}
+.detail-content ul li:hover {
+  background: rgb(5, 80, 80);
+}
+
+.detail-content ul li.delete-button {
+  background-color: rgb(175, 6, 6);
+  margin-top: 1.5rem;
+}
+.detail-content ul li.delete-button:hover {
+  background-color: rgb(128, 9, 9);
+}
+
+/** Scale Content **/
+
+.scale-content > div {
+  border: 1px solid #aaa;
+  margin-bottom: 1rem;
+}
+
+.scale-content h2 {
+  font-size: 1.3rem;
+  padding: 0.5rem;
+
+  background-color: #ddd;
+}
+
+.scale-content button {
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+}
+
+.document-collaboration h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+h3.scale-heading {
+  padding: 0.5rem;
+}
+
+.scale-forms {
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.scale-forms > * {
+  display: none;
+}
+
+.scale-forms > .active {
+  display: block;
+}
+
+#setScale select {
+  max-width: 120px;
+  padding: 0.5rem;
+}
+#setScale select:focus {
+  border-color: rgb(17, 145, 145);
+  background-color: #fff;
+}
+
+.setScale-btn,
+.resetScale-btn {
+  background: rgb(3, 184, 3);
+  color: white;
+  border: 1px solid rgb(3, 155, 3);
+  font-weight: bold;
+}
+
+.setScale-btn:hover {
+  background-color: rgb(3, 155, 3);
+}
+
+.resetScale-btn {
+  background: rgb(184, 3, 3);
+  border-color: rgb(158, 3, 3);
+  margin-top: 0.5rem;
+}
+.resetScale-btn:hover {
+  background-color: rgb(158, 3, 3);
+}
+
+.addScale-btn,
+.measureScale-btn {
+  display: block;
+  padding: 0.8rem;
+  margin: 0.5rem auto;
+  font-size: 1.2rem;
+  background-color: rgb(2, 138, 138);
+  color: white;
+}
+
+.addScale-btn:hover,
+.measureScale-btn:hover {
+  background-color: rgb(6, 119, 119);
+}
+table {
+  width: 100%;
+}
+
+.sections p,
+td,
+th {
+  text-align: left;
+  padding-left: 0.5rem;
+}
+
+tr td:first-child {
+  width: 150px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 0.5rem 0.5rem 0.2rem 0.5rem;
+}
+.sections .addScale-btn {
+  display: inline;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+}
+.grid input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #aaa;
+}
+.grid input:focus {
+  outline: none;
+  border: 1px solid #45b107;
+}
+.toggleGrid-btn {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  background: #dddddd;
+  border: #aaa;
+}
+.toggleGrid-btn:hover {
+  background-color: #ccc;
+}
+
+.toggleGrid-btn.active {
+  background: #45b107;
+  border: #52da04;
+  color: white;
+}
+
+.toggleGrid-btn.active:hover {
+  background: #3b9b04;
+}
+
+/** Create Stage **/
+
+.modal {
+  z-index: -5;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: auto;
+  min-height: 100%!important;
+  padding-bottom: 70px;
+  padding-top: 50px;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+.modal.active {
+  z-index: 5;
+  visibility: visible;
+}
+
+.modal > *:first-child {
+  transform: scale(0, 0);
+  transition: 300ms transform;
+}
+
+.modal.active > *:first-child {
+  transform: scale(1, 1);
+}
+
+.modal-body {
+  background: white;
+  border-radius: 0.5rem;
+  width: 80%;
+  max-width: 700px;
+}
+
+.modal-body > * {
+  padding: 0.5rem;
+}
+
+.modal-body h2 {
+  border-bottom: 2px solid #aaa;
+}
+
+.modal-body form {
+  display: flex;
+  flex-direction: column;
+}
+
+.apply-template-con h3 {
+  margin-bottom: 0.5rem;
+}
+
+.apply-template-con input[type="radio"] {
+  margin-right: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.btn-group {
+  margin-top: 0.8rem;
+}
+
+.btn-group button {
+  background: green;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 0.3rem;
+}
+
+.btn-group button:hover {
+  background-color: rgb(2, 87, 2);
+}
+
+#close-stage-modal {
+  margin-left: 0.5rem;
+  background-color: rgb(128, 126, 126);
+}
+
+#close-stage-modal:hover {
+  background-color: rgb(95, 95, 95);
+}
+
+/** Create New **/
+.multi-field-con {
+  display: flex;
+  justify-content: space-between;
+}
+
+.multi-field-con > *:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.multi-field-con > :first-child {
+  flex: 80% 1 1;
+}
+
+.multi-field-con > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-con {
+  display: flex;
+  align-items: center;
+  margin-top: 0.3rem;
+  border: 2px solid rgb(112, 111, 111);
+  background: rgb(143, 142, 142);
+}
+
+div.radio-con input {
+  /*background: rgb(143, 142, 142);*/
+  margin: 0;
+  border: 0;
+}
+
+.radio-con input[type="radio"] {
+  width: 14px;
+  margin: 0 .5rem;
+}
+
+/*.radio-con input[type="radio"] + input {
+  visibility: hidden;
+}
+
+.radio-con input[type="radio"]:checked + input {
+  visibility: visible;
+  background-color: white;
+}*/
+
+.small-inputs.evenly > *:first-child {
+  flex: auto 0 0;
+}
+
+.styles-header {
+  margin-bottom: 0.5rem;
+}
