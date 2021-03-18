@@ -12,21 +12,16 @@ class billingsController extends Controller
 {
     public function show_biling_page(){
     	$session = session()->get('email');
-    	$user = User::where('email',$session)->get();
-    	$user_id = $user[0]->id;
+    	$user = User::where('email',$session)->first();
+    	$user_id = $user->id;
     	$billing = Billing::where('user_id', $user_id)->get();
-        
-        if($billing[0]->number != null || $billing[0]->number != ''){
-            $billing[0]->number = Crypt::decryptString($billing[0]->number);
-        }
-        if($billing[0]->expiry != null || $billing[0]->expiry != ''){
-            $billing[0]->expiry = Crypt::decryptString($billing[0]->expiry);
-        }
-        if($billing[0]->cvv != null || $billing[0]->cvv != ''){
-            $billing[0]->cvv = Crypt::decryptString($billing[0]->cvv);
-        }
-    
-    	return view('dashboard.setup-billing',['billing'=>$billing,'user'=>$user]);
+
+    	$method = $billing[0];
+
+//
+//        return response()->json( $methods );
+
+    	return view('dashboard.setup-billing',['billing'=>$billing,'method' => $method,'user'=>$user,'intent' => $user->createSetupIntent()]);
     }
     public function update(Request $request)
     {

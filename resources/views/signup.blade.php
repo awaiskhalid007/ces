@@ -18,10 +18,10 @@
   	<div class="row">
   		<div class="col-md-6">
   			<div class="box pricingbox">
-            
+
             <label class="toggler toggler--is-active" id="filt-monthly">Monthly</label>
             <div class="toggle">
-              <input type="checkbox" id="switcher" class="check">
+              <input name="plan" value="" type="checkbox" id="switcher" class="check">
               <b class="b switch"></b>
             </div>
             <label class="toggler" id="filt-yearly">Yearly</label>
@@ -54,7 +54,7 @@
           <div class="title" style="border: none;
           padding-top: 30px; margin-bottom: -60px;">
             {{-- <a href="/signup/google" class="btn" style="
-            font-size: 20px; 
+            font-size: 20px;
             -webkit-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.75);
             -moz-box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.75);
             box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.75);
@@ -65,7 +65,7 @@
                 <span>Sign up with Google</span>
               </a>
             </div>
-          
+
           </div>
   				{{-- <div class="title">
   					<h3>30 Second Sign Up</h3>
@@ -85,7 +85,7 @@
   				</div>
   				<form action="{{route('user.register')}}" method="POST">
   					@csrf
-            <input type="hidden" name="subscription" value="0" id="subscription" />
+            <input type="hidden" name="subscription" value="1" id="subscription" />
   					<input type="text" placeholder="Your name" name="name" required="required" />
             @error('name')
               <p style="color:red;font-size:15px;text-align: left;">{{ $message }}</p>

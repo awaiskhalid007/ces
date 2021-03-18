@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\Admin\adminController;
@@ -103,7 +104,8 @@ Route::get('/user/join',[invitationsController::class, 'accept_invite']);
 Route::post('setup/user/deactivate',[invitationsController::class, 'deactivate_user'])->name('user.deactivate');
 Route::post('setup/user/activate',[invitationsController::class, 'activate_user'])->name('user.activate');
 // ========== Billing Routes=========
-Route::get('/setup/billing',[billingsController::class, 'show_biling_page'])->middleware('session');
+Route::get('/test/plans',[SubscriptionController::class, 'retrievePlans']);
+Route::get('/setup/billing',[billingsController::class, 'show_biling_page'])->middleware('session')->name('billing.setup');
 Route::post('/setup/billing/update',[billingsController::class, 'update'])->name('billing.update');
 Route::post('/setup/billing/add/creit_info',[billingsController::class, 'add_credit_card'])->name('creditcard.add');
 Route::post('/setup/billing/remove/creit_info',[billingsController::class, 'remove_credit_card'])->name('creditcard.remove');
@@ -253,7 +255,7 @@ Route::POST('/editor/plan/stage/delete',[stagesController::class, 'delete_plan_s
 Route::get('/project/{id}/overview/activity', [Activity_LogController::class, 'activity_index']);
 
 
-//Project Template Routes 
+//Project Template Routes
 Route::get('/project/template/{salt}/tasks', [templatesController::class, 'template_todo']);
 Route::get('/project/template/{salt}/stages', [templatesController::class, 'template_stages']);
 Route::get('/project/template/{salt}/sharing', [templatesController::class, 'template_sharing']);
@@ -372,3 +374,18 @@ Route::get('/dashboard/template/active-projects/{id}/delete-todoTask',[adminCont
 // ============== Takeoff Template ===========
 Route::get('/dashboard/all-users/{id}/takeoffTemplate', [adminController::class, 'takeoffTemplate_user'])->name('takeoffTemplate.user');
 Route::get('/dashboard/all-users/takeoffTemplate/{id}/delete', [adminController::class, 'takeoffTemplate_delete'])->name('take0ffTemp.del');
+
+
+
+//============ Benny FIver ===============
+Route::get('/expired', [SubscriptionController::class, 'expired'])->name('expired');
+Route::get('/sub', [SubscriptionController::class, 'showSubscription'])->name('showSubscription');
+Route::post('/subscribe', [SubscriptionController::class, 'processSubscription'])->name('processSubscription');
+Route::post('/store/payment', [SubscriptionController::class, 'postPaymentMethods'])->name('stripe.payment.store');
+Route::post('/update/payment', [SubscriptionController::class, 'updatePayment'])->name('stripe.payment.update');
+Route::post('/update/remove', [SubscriptionController::class, 'removePayment'])->name('stripe.payment.remove');
+
+//Route::get('/subscribe', 'SubscriptionController@showSubscription');
+//Route::post('/subscribe', 'SubscriptionController@processSubscription');
+// welcome page only for subscribed users
+Route::get('/welcome', 'SubscriptionController@showWelcome')->middleware('subscribed');

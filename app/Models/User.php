@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Billable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+   protected $appends = ['trial','expired','expires_in'];
+
+   protected $with = ['plan'];
+
     protected $fillable = [
         'name',
         'company',
@@ -28,8 +29,10 @@ class User extends Authenticatable
         'status',
         'subscription',
         'subscription_paid',
-        'trial',
-        'admin_status'
+        'expires_at',
+//        'trial',
+        'admin_status',
+        'trial_ends_at'
     ];
 
     /**
@@ -41,6 +44,33 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function plan(){
+        return $this->hasOne(Plan::class,'id','subscription');
+    }
+
+    public function getTrialAttribute() {
+        $expires_at = $this->created_at->addDays(14);
+        if($expires_at > Carbon::now()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public function getExpiredAttribute() {
+        if($this->expired_at > Carbon::now()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public function getExpiresInAttribute() {
+        if($this->expires_at > Carbon::now()){
+            return Carbon::now()->diffInDays($this->expires_at, false);
+        }else {
+            return $this->expires_at;
+        }
+    }
 
     /**
      * The attributes that should be cast to native types.

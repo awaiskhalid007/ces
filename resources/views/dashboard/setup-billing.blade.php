@@ -9,6 +9,27 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel='stylesheet' href='css/style.css' type='text/css' />
     <link rel='stylesheet' href='fontawesome/css/all.min.css' type='text/css' />
+
+    <style>
+        .StripeElement {
+            background-color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            -webkit-transition: box-shadow 150ms ease;
+            transition: box-shadow 150ms ease;
+        }
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+        .StripeElement--invalid {
+            border-color: #fa755a;
+        }
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+    </style>
 </head>
 <body id="billings">
 
@@ -20,6 +41,11 @@
                 @include('dashboard.partials.setting-sidebar')
                 <div class="col-lg-9 col-md-12 col-sm-12 rightpanel ">
                     <div class="container-fluid text-center p-0">
+                        @if ($user->expired)
+                            <h2 class="past_due">Your account is Past Due!</h2>
+                        @endif
+
+                        @if(!$method->brand)
                         <h2 class="main_heading">
                             <!-- model for user btn  -->
                             <button type="button" class="btn btn-link p-0" data-toggle="modal" data-target="#myModal"
@@ -30,8 +56,10 @@
                             </button>
                             to guarantee uninterrupted access.
                         </h2>
+                    @endif
+
                         <!-- Modal -->
-                       
+
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content text-left">
@@ -41,73 +69,56 @@
                                             data-dismiss="modal">&times;</button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <div class="form-group">
-                                                    <label for=card_no>Card Number</label>
-                                                    <input type="text" class="form-control" name="number" value="{{$billing[0]->number}}" 
-                                                        id="card_no">
-                                                    <p id="emptyError1" style="color: red;font-size: 14px;display: none;">*Credit card number is a required field.</p>
-                                                    <p id="errors1" style="color: red;font-size: 14px;display: none;"></p>
-                                                </div>
+
+
+                                            <div class="form-group">
+                                                <label for="fname">Name</label>
+                                                <input id="card-holder-name"  type="text" class="form-control" name="name" value="{{ $billing[0]->name }}" />
+                                                <p id="emptyError3" style="color: red;font-size: 14px;display: none;">*Name is required.</p>
                                             </div>
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label for="date">Expiry</label>
-                                                    <input type="date" class="form-control"
-                                                        id="date" name="expiry" value="{{$billing[0]->expiry}}" placeholder="DD/MM/YY">
-                                                    <p id="emptyError2" style="color: red;font-size: 14px;display: none;">*Expiry date is required.</p>
-                                                    <p id="errors2" style="color: red;font-size: 14px;display: none;"></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="fname">Name</label>
-                                                    <input type="text" class="form-control" name="name" value="{{$billing[0]->name}}"
-                                                        id="fname">
-                                                    <p id="emptyError3" style="color: red;font-size: 14px;display: none;">*Name is required.</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="code">Security Code</label>
-                                                    <input type="number" class="form-control"
-                                                        id="code" name="cvv" value="{{$billing[0]->cvv}}" placeholder="CV">
-                                                    <p id="emptyError4" style="color: red;font-size: 14px;display: none;">*Security Code is required.</p>
-                                                    <p id="errors4" style="color: red;font-size: 14px;display: none;"></p>
-                                                </div>
-                                            </div>
-                                        </div>
+
+
+                                            <!-- Stripe Elements Placeholder -->
+                                            <div id="card-element"></div>
+
+                                        <div id="card-errors" role="alert"></div>
+
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" id="addCard" class="btn btn-primary">Submit</button>
+                                        <button class="btn btn-primary" id="card-button" data-secret="{{ $intent->client_secret }}">
+                                            Update Payment Method
+                                        </button>
+{{--                                        <button type="submit" id="addCard" class="btn btn-primary">Submit</button>--}}
                                         <button class="btn btn-secondary"
                                             data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <p>Your trial expires in 12 days</p>
+                            @if ($user->trial)
+                                <p>Your trial expires in {{ $user->expires_in }} day(s) time</p>
+                            @endif
+                        @if ($user->expired)
+                                <p>Your trial expires in {{ $user->expires_in }} day(s) time</p>
+                        @endif
                     </div>
 
                     <div class="container-fluid mb-2 p-4 card text-center">
                         <div class="row">
                             <div class="col-md-3 col-sm-3 col-xs-3">
                                 <span class="more_info">
-                                    <i class="fa fa-question "></i> 
+                                    <i class="fa fa-question "></i>
                                     More Info
                                 </span>
                                 <h6>Renewal Amount</h6>
-                                <h6>$<?php echo 69 * (int)$user[0]->licences; ?> USD</h6>
+                                <h6>$<?php echo 69 * (int)$user->licences; ?> USD</h6>
                             </div>
                             <div class="col-md-1 col-sm-1 col-xs-1">
                                 <span class="symbol"><i class="fa fa-plus my-4"></i></span>
                             </div>
                             <div class="col-md-3 col-sm-3 col-xs-3 question">
                                 <span class="more_info">
-                                    <i class="fa fa-question "></i> 
+                                    <i class="fa fa-question "></i>
                                     More Info
                                 </span>
                                 <h6>Balance</h6>
@@ -118,14 +129,14 @@
                             </div>
                             <div class="col-md-4 col-sm-4 col-xs-4 question">
                                 <span class="more_info">
-                                    <i class="fa fa-question "></i> 
+                                    <i class="fa fa-question "></i>
                                     More Info
                                 </span>
                                 <h6>Upcoming Bill</h6>
-                                <h6>$<?php echo 69 * (int)$user[0]->licences; ?> USD</h6>
+                                <h6>$<?php echo 69 * (int)$user->licences; ?> USD</h6>
                             </div>
                         </div>
-                        <p class="text-center">Upcoming Bill of <b>$<?php echo 69 * (int)$user[0]->licences; ?> USD</b> based on <b>{{$user[0]->licences}} licence(s)</b> plus the outstanding
+                        <p class="text-center">Upcoming Bill of <b>$<?php echo 69 * (int)$user->licences; ?> USD</b> based on <b>{{$user->licences}} licence(s)</b> plus the outstanding
                             balance from licence changes during this billing period (12/12/2020 to 26/12/2020).</p>
                     </div>
 
@@ -136,48 +147,50 @@
                                     <div class="card-header wordstrong">
                                         <p class="mb-0">Credit Card</p>
                                     </div>
-                                    
+                                    @if(!$method->brand)
                                     <div class="container">
                                         <!-- model for user btn  -->
-                                        @if($billing[0]->number == '' || $billing[0]->number== null)
+
                                         <div class="col-md-12 text-center">
                                             <button type="button" class="btn btn-lg btn-primary creditcard"
                                             data-toggle="modal" data-target="#myModal"> <span>
                                                 <i class="far fa-credit-card"></i>
                                             </span> Add Card</button>
                                         </div>
-                                        @else
+
+                                    </div>
+                                    @else
                                             <div class="container py-2 text-left">
-                                                <p><strong>Name: </strong>{{$billing[0]->name}}</p>
-                                                <p><strong>Card Number: </strong>XXXX-XXXX-XXXX-<?php echo substr($billing[0]->number, -4); ?></p>
+                                                <p><strong>Name: </strong>{{$method['name']}}</p>
+                                                <p><strong>Card Number: </strong>{{$method['number']}} ({{ $method['brand'] }})</p>
                                                 <p>
                                                     <strong>Expiry: </strong>
-                                                    <?php echo date('m/Y', strtotime($billing[0]->expiry)) ?>
+                                                    {{ $method['expiry'] }}
                                                 </p>
                                             </div>
-                                        @endif
-                                    </div>
-                                    @if($billing[0]->number != '' || $billing[0]->number != null)
-                                    <div class="card-header card-bottom">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#myModal"> <span>
+
+                                            <div class="card-header card-bottom">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                                data-target="#myModal"> <span>
                                                         <i class="fa fa-credit-card"></i>
                                                     </span>Update Card
-                                                </button>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-6 text-right">
+                                                        <form action="{{route('stripe.payment.remove')}}" method="POST">
+                                                            <input type="hidden" name="id" value="{{ $method['id'] }}">
+                                                            @csrf
+                                                            <button class="bg-light remove_credit_card">
+                                                                <i class="fa fa-times"></i>
+                                                                &nbsp; Remove Card
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6 text-right">
-                                                <form action="{{route('creditcard.remove')}}" method="POST">
-                                                @csrf
-                                                    <button class="bg-light remove_credit_card">
-                                                        <i class="fa fa-times"></i>
-                                                        &nbsp; Remove Card
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     @endif
                                 </div>
                             </div>
@@ -359,7 +372,7 @@
          });
         let ajax = 1;
         $("#addCard").click(function(){
-           
+
             // hiding errors
             $("#myModal p").hide();
             var regExp = /[a-zA-Z]/g;
@@ -402,7 +415,7 @@
                 ajax = 0;
             }
 
-            
+
             if(number.length > 0){
                 if(number.length < 16 || number.length > 19)
                 {
@@ -434,7 +447,7 @@
             {
                 var CSRF_TOKEN = $("meta[name='csrf-token']").attr('content');
                 var data = {
-                    number,expiry,name,cvv 
+                    number,expiry,name,cvv
                 };
                 $.ajax({
                     type: 'POST',
@@ -446,6 +459,62 @@
                         {
                             window.open('/setup/billing','_self');
                         }
+                    }
+                });
+            }
+        });
+    </script>
+
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        const stripe = Stripe('{{ env('STRIPE_KEY') }}');;
+
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+
+        cardElement.mount('#card-element');
+
+        const cardHolderName = document.getElementById('card-holder-name');
+        const cardButton = document.getElementById('card-button');
+        const clientSecret = cardButton.dataset.secret;
+
+        cardButton.addEventListener('click', async (e) => {
+            const { setupIntent, error } = await stripe.confirmCardSetup(
+                clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: { name: cardHolderName.value }
+                    }
+                }
+            );
+
+            if (error) {
+                console.log(error)
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+            } else {
+                console.log(setupIntent)
+                // console.log(setupIntent)
+                // The card has been verified successfully...
+                {{--window.location = "{{ route('billing.setup') }}";--}}
+
+                {{--let name = $("input[name=name]").val();--}}
+                {{--let password = $("input[name=password]").val();--}}
+                {{--let email = $("input[name=email]").val();--}}
+
+                $.ajax({
+                    type:'POST',
+                    url:"{{ route('stripe.payment.update') }}",
+                    data:{payment_method:setupIntent.payment_method},
+                    success:function(data){
+                        window.location =  "{{ route('billing.setup') }}";
                     }
                 });
             }

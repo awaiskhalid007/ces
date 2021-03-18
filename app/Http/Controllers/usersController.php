@@ -44,16 +44,17 @@ class usersController extends Controller
         $subscription = $request->subscription;
         $subscription_paid = '0';
         $trial = '1';
+        $expires_at = Carbon::now()->addDays(14);
         $admin_status = 0;
     	// Checking if the email already exists or not!
     	$checkEmail = User::where('email', $email)->get();
 
     	if($checkEmail->isEmpty()){
-    	   
+
     	// Encryting Password
 	    	$password = bcrypt($request->password);
 	    	// Inserting data
-	    	$user = User::create(['name'=>$name, 'company'=>$company,'email'=>$email,'password'=>$password,'phone'=>$phone, 'timezone'=>$timezone,'licences'=>$licences, 'type'=>$type, 'status'=>$status,'subscription'=>$subscription,'subscription_paid'=>$subscription_paid,'trial'=>$trial,'admin_status'=>$admin_status]);
+	    	$user = User::create(['name'=>$name,'expires_at' => $expires_at,'trial_ends_at'=>$expires_at, 'company'=>$company,'email'=>$email,'password'=>$password,'phone'=>$phone, 'timezone'=>$timezone,'licences'=>$licences, 'type'=>$type, 'status'=>$status,'subscription'=>$subscription,'subscription_paid'=>$subscription_paid,'trial'=>$trial,'admin_status'=>$admin_status]);
 	    	if($user)
 	    	{
                 $user_id = $user->id;
@@ -69,12 +70,13 @@ class usersController extends Controller
                 Archeivereason::create(['reason'=>'Won', 'user_id'=>$user_id,'color'=>'#F89C0E','sort'=>1]);
                 Archeivereason::create(['reason'=>'Lost', 'user_id'=>$user_id,'color'=>'#F89C0E','sort'=>2]);
                 Archeivereason::create(['reason'=>'Complete', 'user_id'=>$user_id,'color'=>'#F89C0E','sort'=>3]);
-                
+
                 $data = DB::table('user_activities')->insert([
                     'message' => $message,
                     'user_id'=>$user_id,
                     'created_at' => $timestamp
                 ]);
+                $user->createOrGetStripeCustomer();
                 // Sending confirmation email.
                 (new emailsController)->signup_verification_email($name,$email);
 	    		// $request->session()->put('email', $email);
@@ -90,10 +92,13 @@ class usersController extends Controller
     {
     	$email = $request->email;
     	$password = $request->password;
-    	
+
     	$user = User::where('email', $email)->get();
+
         if(!$user->isEmpty())
         {
+            $newUser = User::where('email',$email)->first();
+            $newUser->createOrGetStripeCustomer();
         	$dbPass = $user[0]->password;
             if(password_verify($password, $dbPass))
             {
@@ -103,6 +108,7 @@ class usersController extends Controller
                     $details = "details";
                     $request->session()->put('details', $details);
                     $request->session()->put('email', $email);
+
                     return redirect('/projects/open');
                 }else{
                     return back()->withErrors('not_verified');
@@ -115,7 +121,7 @@ class usersController extends Controller
         }
     }
     public function logout(Request $request)
-    {   
+    {
         $request->session()->flush();
         return redirect('/login');
     }
@@ -194,7 +200,7 @@ class usersController extends Controller
         $email = session()->get('email');
         $old = $request->old;
         $new = $request->new;
-        
+
         $user = User::where('email', $email)->get();
         $dbPass = $user[0]->password;
         if(password_verify($old, $dbPass))
@@ -219,7 +225,7 @@ class usersController extends Controller
             $invitations = Invitation::where('invited_by', $user_id)->get();
 
             return view('dashboard.setup-licences',[
-                'user'              =>      $user, 
+                'user'              =>      $user,
                 'invitations'       =>      $invitations
             ]);
         }

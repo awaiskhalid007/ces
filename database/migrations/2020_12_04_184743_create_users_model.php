@@ -25,9 +25,17 @@ class CreateUsersModel extends Migration
             $table->string('type');
             $table->string('status');
             $table->integer('admin_status');
-            $table->string('subscription');
-            $table->string('subscription_paid');
-            $table->string('trial');
+            $table->integer('subscription')->default(1);
+            $table->boolean('subscription_paid')->default(false);
+            $table->date('expires_at')->nullable();
+//            $table->string('trial');
+
+            //stripe
+            $table->string('stripe_id')->nullable()->index();
+            $table->string('card_brand')->nullable();
+            $table->string('card_last_four', 4)->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
+
             $table->timestamps();
         });
     }
