@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1ec1be5-6519-40dc-9223-9a743ca71a31" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/billingsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/billingsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/usersController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/usersController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Billing.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Billing.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_12_04_184743_create_users_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_12_04_184743_create_users_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/setup-billing.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/setup-billing.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/signup.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/signup.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +165,7 @@
       <option name="presentableId" value="Default" />
       <updated>1615965751340</updated>
       <workItem from="1615965756110" duration="7143000" />
-      <workItem from="1615990222804" duration="30906000" />
+      <workItem from="1615990222804" duration="32026000" />
     </task>
     <servers />
   </component>
