@@ -379,7 +379,7 @@ Route::get('/dashboard/all-users/takeoffTemplate/{id}/delete', [adminController:
 
 //============ Benny FIver ===============
 Route::get('/expired', [SubscriptionController::class, 'expired'])->name('expired');
-Route::get('/sub', [SubscriptionController::class, 'showSubscription'])->name('showSubscription');
+Route::get('/sub', [SubscriptionController::class, 'test'])->name('showSubscription');
 Route::post('/subscribe', [SubscriptionController::class, 'processSubscription'])->name('processSubscription');
 Route::post('/store/payment', [SubscriptionController::class, 'postPaymentMethods'])->name('stripe.payment.store');
 Route::post('/update/payment', [SubscriptionController::class, 'updatePayment'])->name('stripe.payment.update');

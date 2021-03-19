@@ -33,6 +33,14 @@
 </head>
 <body id="billings">
 
+<div id="loading-image" style="display:none; margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgb(102, 102, 102); z-index: 30001; opacity: 0.8;">
+    <p style="position: absolute; color: White; top: 50%; left: 45%;">
+
+        <img  src="/images/loader.gif" />
+
+    </p>
+</div>
+
     @include('dashboard.partials.header')
 
     <section id="wrapper">
@@ -111,7 +119,7 @@
                                     More Info
                                 </span>
                                 <h6>Renewal Amount</h6>
-                                <h6>$<?php echo 69 * (int)$user->licences; ?> USD</h6>
+                                <h6>{{ $user->plan->price .' '. $user->plan->currency }}</h6>
                             </div>
                             <div class="col-md-1 col-sm-1 col-xs-1">
                                 <span class="symbol"><i class="fa fa-plus my-4"></i></span>
@@ -132,12 +140,20 @@
                                     <i class="fa fa-question "></i>
                                     More Info
                                 </span>
-                                <h6>Upcoming Bill</h6>
-                                <h6>$<?php echo 69 * (int)$user->licences; ?> USD</h6>
+                                <h6>Renewal Amount</h6>
+                                <h6>{{ $user->plan->price .' '. $user->plan->currency }}</h6>
                             </div>
                         </div>
-                        <p class="text-center">Upcoming Bill of <b>$<?php echo 69 * (int)$user->licences; ?> USD</b> based on <b>{{$user->licences}} licence(s)</b> plus the outstanding
-                            balance from licence changes during this billing period (12/12/2020 to 26/12/2020).</p>
+                        @if (!$user->trial)
+                            @if (!$user->expired)
+                                <p class="text-center">Next Renewal Date : {{ $user->expires_at }}</p>
+                            @else
+                                <p class="text-center">Subscription expired on : {{ $user->expires_at }}</p>
+                            @endif
+                        @endif
+
+{{--                        <p class="text-center">Upcoming Bill of <b>$<?php echo 69 * (int)$user->licences; ?> USD</b> based on <b>{{$user->licences}} licence(s)</b> plus the outstanding--}}
+{{--                            balance from licence changes during this billing period (12/12/2020 to 26/12/2020).</p>--}}
                     </div>
 
                     <div class="container-fluid mb-1 p-0">
@@ -179,10 +195,10 @@
                                                         </button>
                                                     </div>
                                                     <div class="col-md-6 text-right">
-                                                        <form action="{{route('stripe.payment.remove')}}" method="POST">
+                                                        <form id="form" action="{{route('stripe.payment.remove')}}" method="POST">
                                                             <input type="hidden" name="id" value="{{ $method['id'] }}">
                                                             @csrf
-                                                            <button class="bg-light remove_credit_card">
+                                                            <button id="submit" class="bg-light remove_credit_card">
                                                                 <i class="fa fa-times"></i>
                                                                 &nbsp; Remove Card
                                                             </button>
@@ -211,7 +227,7 @@
                                         @endif
                                     </div>
                                     <div class="container-fluid p-0">
-                                        <form action="{{route('billing.update')}}" method="POST">
+                                        <form id="form" action="{{route('billing.update')}}" method="POST">
                                             @csrf
                                             <div class="card-header card-bottom">
                                                 <!-- model for user btn  -->
@@ -264,7 +280,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="submit"
+                                                                <button id="submit" type="submit"
                                                                     class="btn btn-primary">Submit</button>
                                                                 <button class="btn btn-secondary"
                                                                     data-dismiss="modal">Close</button>
@@ -289,17 +305,34 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Number</th>
                                         <th scope="col">Date</th>
-                                        <th scope="col">Amount</th>
+                                        <th scope="col">Total</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Payment Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @if (count($invoices) > 0)
+                                    @foreach($invoices as $item)
+                                    <tr>
+                                        <td>{{ $item['date'] }}</td>
+                                        <td>{{ $item['total'] }}</td>
+                                        <td>
+                                            @foreach ($item['data'] as $des)
+                                                {{ $des['description'] }} <br />
+                                            @endforeach
+                                        </td>
+                                        <td>{{ $item['paid'] ? 'Paid' : 'Unpaid' }}</td>
+                                        <td><a href="{{ $item['download'] }}" class="btn btn-sm btn-success">Download</a> </td>
+                                    </tr>
+                                    @endforeach
+                                @else
                                     <td colspan="4">
                                         <em>
                                             <p class="text-muted mb-0">We haven't issued you any invoices yet.</p>
                                         </em>
                                     </td>
+                                @endif
                                 </tbody>
                             </table>
                         </div>
@@ -468,6 +501,13 @@
 
     <script src="https://js.stripe.com/v3/"></script>
     <script>
+        $(document).ready( function () {
+            $("#form").submit(function (e) {
+                $("#submit").attr("disabled", true);
+                $("#loading-image").show();
+                return true;
+            });
+        } );
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -486,6 +526,7 @@
         const clientSecret = cardButton.dataset.secret;
 
         cardButton.addEventListener('click', async (e) => {
+            $("#loading-image").show();
             const { setupIntent, error } = await stripe.confirmCardSetup(
                 clientSecret, {
                     payment_method: {
@@ -499,6 +540,7 @@
                 console.log(error)
                 var errorElement = document.getElementById('card-errors');
                 errorElement.textContent = error.message;
+                $("#loading-image").hide();
             } else {
                 console.log(setupIntent)
                 // console.log(setupIntent)

@@ -51,6 +51,9 @@ class User extends Authenticatable
 
     public function getTrialAttribute() {
         $expires_at = $this->created_at->addDays(14);
+        if($this->expires_at > $expires_at){
+            return false;
+        }
         if($expires_at > Carbon::now()){
             return true;
         }else {

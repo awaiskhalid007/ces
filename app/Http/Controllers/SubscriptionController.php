@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Billing;
 use App\Models\Plan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -55,9 +56,14 @@ class SubscriptionController extends Controller
     public function updateSubscription( $paymentId){
         $session = session()->get('email');
         $user = User::where('email',$session)->first();
-        if( !$user->subscribed($user->plan->stripe_id) ){
-            $user->newSubscription('default', $user->plan->stripe_id)
+        if( !$user->subscribed($user->plan->name) ){
+            $user->newSubscription($user->plan->name, $user->plan->stripe_id)
                 ->create( $paymentId );
+
+            $timestamp = $user->asStripeCustomer()["subscriptions"]->data[0]["current_period_end"];
+            $user['expires_at'] = Carbon::createFromTimeStamp($timestamp)->toDateTimeString();
+
+            $user->save();
         }
 //        else{
 //            $user->subscription($user->subscription)->swap( $user->plan->stripe_id );

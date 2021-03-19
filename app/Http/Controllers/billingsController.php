@@ -18,10 +18,21 @@ class billingsController extends Controller
 
     	$method = $billing[0];
 
-//
-//        return response()->json( $methods );
+        $invoices = [];
+        foreach( $user->invoicesIncludingPending() as $item ){
+            array_push( $invoices, [
+                'id' => $item->id,
+                'amount_due' => $item->amount_due,
+                'amount_paid' => $item->amount_paid,
+                'download' => $item->invoice_pdf,
+                'paid' => $item->paid,
+                'total' => $item->total(),
+                'date' => $item->date()->toFormattedDateString(),
+                'data' => $item->lines->data,
+            ] );
+        }
 
-    	return view('dashboard.setup-billing',['billing'=>$billing,'method' => $method,'user'=>$user,'intent' => $user->createSetupIntent()]);
+    	return view('dashboard.setup-billing',['billing'=>$billing,'invoices' => $invoices,'method' => $method,'user'=>$user,'intent' => $user->createSetupIntent()]);
     }
     public function update(Request $request)
     {
